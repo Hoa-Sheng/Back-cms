@@ -105,11 +105,15 @@ router.delete('/:commentId', authMiddleware, async (req, res) => {
 
 
 // Route pour récupérer les commentaires d'un article
-router.get('/', async (req, res) => {
+router.get('/:articleId', async (req, res) => {
+    const { articleId } = req.params;
 
     try {
-        // Récupérer tous les commentaires pour l'article donné
-        const [comments] = await connection.query('SELECT * FROM Commentaires');
+        // Requête pour récupérer les commentaires liés à un article spécifique
+        const [comments] = await connection.query(
+            'SELECT * FROM Commentaires WHERE ID_article_Articles = ?',
+            [articleId]
+        );
 
         if (comments.length === 0) {
             return res.status(404).send('Aucun commentaire trouvé pour cet article');

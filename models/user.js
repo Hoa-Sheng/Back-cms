@@ -42,12 +42,22 @@ class User {
   }
   static async findById(userId) {
     try {
-      const [rows] = await db.query("SELECT * FROM Utilisateur WHERE ID_utilisateur_Utilisateur = ?", [userId]);
+      console.log('Recherche de l\'utilisateur avec l\'ID :', userId);
+  
+      const [rows] = await db.query(
+        "SELECT * FROM Utilisateur WHERE ID_utilisateur_Utilisateur = ?",
+        [userId]
+      );
+  
+      console.log('Résultat de la requête :', rows);
+  
       return rows[0]; // Retourne les détails de l'utilisateur
     } catch (err) {
+      console.error('Erreur lors de la requête findById :', err);
       throw err; // Relance l'erreur pour qu'elle soit gérée
     }
   }
+  
 
   static async deleteById(userId) {
     try {
