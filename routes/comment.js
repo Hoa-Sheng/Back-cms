@@ -104,11 +104,22 @@ router.delete('/:commentId', authMiddleware, async (req, res) => {
 
 
 
-// Route pour récupérer les commentaires d'un article
+// ...existing code...
+
 router.get('/:articleId', async (req, res) => {
     const { articleId } = req.params;
 
     try {
+        // Vérifier si l'article existe
+        const [article] = await connection.query(
+            'SELECT * FROM Articles WHERE ID_article_Articles = ?',
+            [articleId]
+        );
+
+        if (article.length === 0) {
+            return res.status(404).send('Article non trouvé');
+        }
+
         // Requête pour récupérer les commentaires liés à un article spécifique
         const [comments] = await connection.query(
             'SELECT * FROM Commentaires WHERE ID_article_Articles = ?',
@@ -119,12 +130,11 @@ router.get('/:articleId', async (req, res) => {
             return res.status(404).send('Aucun commentaire trouvé pour cet article');
         }
 
-        return res.status(200).json(comments); // Retourner les commentaires sous forme de JSON
+        return res.status(200).json(comments);
     } catch (err) {
         console.error('Erreur lors de la récupération des commentaires :', err);
         return res.status(500).send('Erreur : Impossible de récupérer les commentaires');
     }
 });
-
 
 module.exports = router;

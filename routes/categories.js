@@ -107,20 +107,18 @@ router.delete('/:id', (req, res) => {
 });
 
 router.get('/', (req, res) => {
-    const query = 'SELECT * FROM Categories';
-  
-    connection.query(query, (err, results) => {
-      if (err) {
-        console.error('Erreur lors de la récupération des articles:', err);
-        return res.status(500).send('Erreur lors de la récupération des articles');
-      }
-  
-      if (results.length === 0) {
-        return res.status(404).send('Aucun article trouvé');
-      }
-  
-      res.status(200).json(results);
-    });
+  const query = 'SELECT * FROM Categories';
+  connection.query(query, (err, results) => {
+    if (err) {
+      console.error('Erreur lors de la récupération des catégories:', err);
+      return res.status(500).send('Erreur lors de la récupération des catégories');
+    }
+    if (results.length === 0) {
+      return res.status(404).send('Aucune catégorie trouvée');
+    }
+    res.status(200).json(results);
   });
+});
+
 
 module.exports = router;
